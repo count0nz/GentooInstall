@@ -154,7 +154,7 @@ The following settings are hardcoded in the scripts and may need to be changed m
 |---------|----------------|---------|
 | **Timezone** | `America/New_York` | `UTC` |
 | **Keyboard** | `us` (US English) | `us` (US English) |
-| **Locales** | `en_US.UTF-8`, `C.UTF-8` | `en_US.UTF-8`, `C.UTF-8` |
+| **Locales** | `en_US.UTF-8`, `C.UTF-8` | `C.UTF-8` |
 | **Default LANG** | `en_US.UTF-8` | `C.UTF-8` |
 | **LINGUAS** | `en` | `en` |
 

@@ -141,10 +141,23 @@ fi
 # --- Download Stage3 OpenRC ---
 echo ">> Downloading Stage3 OpenRC (amd64) ..."
 STAGE_URL_BASE="https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-openrc"
-STAGE_TARBALL=$(curl -s "$STAGE_URL_BASE/" | sed -n 's/.*href="\(stage3-amd64-openrc-.*\.tar\.xz\)".*/\1/p' | head -n1)
+
+STAGE_TARBALL=$(curl -fsSL "$STAGE_URL_BASE/latest-stage3-amd64-openrc.txt" |
+    awk '/^stage3-amd64-openrc-.*\.tar\.xz/ {print $1; exit}')
+
 [[ -n "$STAGE_TARBALL" ]] || bail "Stage3 not found in $STAGE_URL_BASE"
-wget -O "/mnt/gentoo/$STAGE_TARBALL" "$STAGE_URL_BASE/$STAGE_TARBALL"
-tar xpf "/mnt/gentoo/$STAGE_TARBALL" -C /mnt/gentoo --xattrs-include='*.*' --numeric-owner
+
+echo ">> Stage3: $STAGE_TARBALL"
+
+wget -O "/mnt/gentoo/$STAGE_TARBALL" \
+    "$STAGE_URL_BASE/$STAGE_TARBALL" ||
+    bail "Failed to download Stage3"
+
+tar xpf "/mnt/gentoo/$STAGE_TARBALL" \
+    -C /mnt/gentoo \
+    --xattrs-include='*' \
+    --numeric-owner ||
+    bail "Failed to extract Stage3"
 
 # --- Prepare chroot ---
 cp -L /etc/resolv.conf /mnt/gentoo/etc/
@@ -364,6 +377,7 @@ FCFLAGS="\${COMMON_FLAGS}"
 FFLAGS="\${COMMON_FLAGS}"
 MAKEOPTS="-j${NP}"
 CHOST="x86_64-pc-linux-gnu"
+RUSTFLAGS="-C target-cpu=native"
 USE="-dbus -systemd -X -wayland -gtk -qt -pulseaudio -alsa -gdk -opengl"
 LINGUAS="en"
 ACCEPT_LICENSE="*"

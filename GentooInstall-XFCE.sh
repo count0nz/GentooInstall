@@ -393,8 +393,9 @@ VIDEO_CARDS="${GPU}"
 USE="X xfce gtk gtk3 pulseaudio udev elogind dbus policykit bluetooth networkmanager opengl vulkan -systemd -kde -plasma -qt5 -qt6 -sddm"
 LINGUAS="en"
 ACCEPT_LICENSE="*"
-FEATURES="parallel-install"
+FEATURES="parallel-install getbinpkg binpkg-request-signature"
 INPUT_DEVICES="libinput synaptics evdev"
+EMERGE_DEFAULT_OPTS="--getbinpkg --binpkg-respect-use=y --with-bdeps=y"
 EOF
 
 # Hostname and hosts
